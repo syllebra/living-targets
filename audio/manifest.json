@@ -1,0 +1,561 @@
+{
+  "sampleRate": 48000,
+  "count": 55,
+  "sprite": {
+    "file": "clicksprite.wav",
+    "frames": 3146209,
+    "duration": 65.546
+  },
+  "sounds": [
+    {
+      "name": "click-01-pop",
+      "file": "click-01-pop.wav",
+      "category": "click",
+      "description": "clic UI universel \u2014 corps brillant, chute de pitch",
+      "duration": 0.454,
+      "reverb": 0.16,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-02-tick",
+      "file": "click-02-tick.wav",
+      "category": "click",
+      "description": "ultra court, tr\u00e8s aigu \u2014 taps rapides",
+      "duration": 0.045,
+      "reverb": 0.0,
+      "dry": false,
+      "channels": 1
+    },
+    {
+      "name": "click-03-coin",
+      "file": "click-03-coin.wav",
+      "category": "click",
+      "description": "deux marches carr\u00e9es doubl\u00e9es \u2014 coin arcade",
+      "duration": 0.632,
+      "reverb": 0.2,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-04-zap",
+      "file": "click-04-zap.wav",
+      "category": "click",
+      "description": "saw descendant bitcrush\u00e9 \u2014 laser court",
+      "duration": 0.489,
+      "reverb": 0.18,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-05-snap",
+      "file": "click-05-snap.wav",
+      "category": "click",
+      "description": "attaque bois\u00e9e + sub \u2014 impact physique",
+      "duration": 0.554,
+      "reverb": 0.22,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-06-blip",
+      "file": "click-06-blip.wav",
+      "category": "click",
+      "description": "FM digital verre \u2014 UI de jeu",
+      "duration": 0.529,
+      "reverb": 0.2,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-07-thud",
+      "file": "click-07-thud.wav",
+      "category": "click",
+      "description": "grave et lourd \u2014 grosses cibles",
+      "duration": 0.624,
+      "reverb": 0.18,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-08-chime",
+      "file": "click-08-chime.wav",
+      "category": "click",
+      "description": "partiels inharmoniques \u2014 r\u00e9compense",
+      "duration": 1.304,
+      "reverb": 0.34,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-09-glitch",
+      "file": "click-09-glitch.wav",
+      "category": "click",
+      "description": "carr\u00e9 hach\u00e9 \u2014 broken-arcade",
+      "duration": 0.414,
+      "reverb": 0.12,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-10-volley",
+      "file": "click-10-volley.wav",
+      "category": "click",
+      "description": "3 pops ascendantes \u2014 \u00ab hit all \u00bb",
+      "duration": 0.605,
+      "reverb": 0.17,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-11-tock",
+      "file": "click-11-tock.wav",
+      "category": "click",
+      "description": "balancier / bloc de bois \u2014 tr\u00e8s serr\u00e9",
+      "duration": 0.384,
+      "reverb": 0.13,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-12-clack",
+      "file": "click-12-clack.wav",
+      "category": "click",
+      "description": "clavier m\u00e9canique : descente + remont\u00e9e",
+      "duration": 0.384,
+      "reverb": 0.1,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-13-marimba",
+      "file": "click-13-marimba.wav",
+      "category": "click",
+      "description": "mailloche bois \u2014 chaleureux, organique",
+      "duration": 0.854,
+      "reverb": 0.28,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-14-bubble",
+      "file": "click-14-bubble.wav",
+      "category": "click",
+      "description": "goutte d'eau montante (bloop)",
+      "duration": 0.584,
+      "reverb": 0.24,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-15-digi",
+      "file": "click-15-digi.wav",
+      "category": "click",
+      "description": "confirmation num\u00e9rique 2 tons, 6-bit",
+      "duration": 0.444,
+      "reverb": 0.13,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "click-16-steel",
+      "file": "click-16-steel.wav",
+      "category": "click",
+      "description": "ping m\u00e9tallique court",
+      "duration": 0.804,
+      "reverb": 0.26,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "ui-01-soft-press",
+      "file": "ui-01-soft-press.wav",
+      "category": "ui",
+      "description": "pression douce \u2014 sourdine + souffle filtr\u00e9",
+      "duration": 0.524,
+      "reverb": 0.16,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "ui-02-hover",
+      "file": "ui-02-hover.wav",
+      "category": "ui",
+      "description": "survol l\u00e9ger, \u00e0 peine audible",
+      "duration": 0.06,
+      "reverb": 0.0,
+      "dry": false,
+      "channels": 1
+    },
+    {
+      "name": "ui-03-toggle-on",
+      "file": "ui-03-toggle-on.wav",
+      "category": "ui",
+      "description": "bascule ON \u2014 deux notes montantes",
+      "duration": 0.584,
+      "reverb": 0.18,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "ui-04-toggle-off",
+      "file": "ui-04-toggle-off.wav",
+      "category": "ui",
+      "description": "bascule OFF \u2014 deux notes descendantes",
+      "duration": 0.584,
+      "reverb": 0.18,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "ui-05-confirm",
+      "file": "ui-05-confirm.wav",
+      "category": "ui",
+      "description": "confirmation \u2014 tierce majeure",
+      "duration": 0.764,
+      "reverb": 0.22,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "ui-06-cancel",
+      "file": "ui-06-cancel.wav",
+      "category": "ui",
+      "description": "annulation \u2014 seconde mineure, mate",
+      "duration": 0.664,
+      "reverb": 0.16,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-01-powerup",
+      "file": "reward-01-powerup.wav",
+      "category": "reward",
+      "description": "arp\u00e8ge carr\u00e9 montant \u2014 power-up",
+      "duration": 1.174,
+      "reverb": 0.26,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-02-combo",
+      "file": "reward-02-combo.wav",
+      "category": "reward",
+      "description": "3 cloches rapides ascendantes \u2014 combo",
+      "duration": 1.054,
+      "reverb": 0.26,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-03-sparkle",
+      "file": "reward-03-sparkle.wav",
+      "category": "reward",
+      "description": "scintillement de partiels aigus \u2014 tr\u00e8s a\u00e9rien",
+      "duration": 1.754,
+      "reverb": 0.55,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-04-jackpot",
+      "file": "reward-04-jackpot.wav",
+      "category": "reward",
+      "description": "arp\u00e8ge 5 notes + cloche \u2014 jackpot",
+      "duration": 1.884,
+      "reverb": 0.4,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-05-coin-big",
+      "file": "reward-05-coin-big.wav",
+      "category": "reward",
+      "description": "le coin, avec de la place autour",
+      "duration": 1.104,
+      "reverb": 0.32,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-06-arpeggio",
+      "file": "reward-06-arpeggio.wav",
+      "category": "reward",
+      "description": "arp\u00e8ge majeur 5 notes, carr\u00e9s filtr\u00e9s \u2014 mont\u00e9e rapide",
+      "duration": 1.404,
+      "reverb": 0.28,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-07-level-up",
+      "file": "reward-07-level-up.wav",
+      "category": "reward",
+      "description": "level up \u2014 3 marches montantes en saw d\u00e9saccord\u00e9",
+      "duration": 1.654,
+      "reverb": 0.3,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-08-fanfare",
+      "file": "reward-08-fanfare.wav",
+      "category": "reward",
+      "description": "fanfare I-IV-I, cuivres filtr\u00e9s",
+      "duration": 1.954,
+      "reverb": 0.34,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-09-gem",
+      "file": "reward-09-gem.wav",
+      "category": "reward",
+      "description": "gemme ramass\u00e9e \u2014 ping clair + blip montant",
+      "duration": 0.904,
+      "reverb": 0.24,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-10-streak",
+      "file": "reward-10-streak.wav",
+      "category": "reward",
+      "description": "combo qui monte \u2014 6 ticks ascendants",
+      "duration": 1.054,
+      "reverb": 0.22,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-11-unlock",
+      "file": "reward-11-unlock.wav",
+      "category": "reward",
+      "description": "d\u00e9verrouillage \u2014 clic m\u00e9canique + accord montant",
+      "duration": 1.604,
+      "reverb": 0.32,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-12-star-get",
+      "file": "reward-12-star-get.wav",
+      "category": "reward",
+      "description": "\u00e9toile obtenue \u2014 arp\u00e8ge scintillant + tra\u00een\u00e9e aigu\u00eb",
+      "duration": 1.804,
+      "reverb": 0.45,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-13-achievement",
+      "file": "reward-13-achievement.wav",
+      "category": "reward",
+      "description": "succ\u00e8s d\u00e9bloqu\u00e9 \u2014 nappe + cloche",
+      "duration": 2.704,
+      "reverb": 0.48,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-14-coin-rain",
+      "file": "reward-14-coin-rain.wav",
+      "category": "reward",
+      "description": "pluie de pi\u00e8ces \u2014 6 coins qui tombent",
+      "duration": 1.704,
+      "reverb": 0.3,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-15-chime-cluster",
+      "file": "reward-15-chime-cluster.wav",
+      "category": "reward",
+      "description": "cluster de cloches (triade) \u2014 c\u00e9r\u00e9monieux",
+      "duration": 2.454,
+      "reverb": 0.45,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-16-magic-swirl",
+      "file": "reward-16-magic-swirl.wav",
+      "category": "reward",
+      "description": "tourbillon FM montant \u2014 magique",
+      "duration": 1.754,
+      "reverb": 0.42,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-17-perfect",
+      "file": "reward-17-perfect.wav",
+      "category": "reward",
+      "description": "quinte parfaite + cloche \u2014 net et satisfaisant",
+      "duration": 1.704,
+      "reverb": 0.38,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-18-tally",
+      "file": "reward-18-tally.wav",
+      "category": "reward",
+      "description": "comptage de bonus \u2014 ticks puis confirmation",
+      "duration": 1.454,
+      "reverb": 0.2,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "reward-19-supernova",
+      "file": "reward-19-supernova.wav",
+      "category": "reward",
+      "description": "supernova \u2014 sub + bloom bruit\u00e9 + cloches",
+      "duration": 2.604,
+      "reverb": 0.52,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "hit-01-impact",
+      "file": "hit-01-impact.wav",
+      "category": "impact",
+      "description": "gros impact : bruit + sub + zap",
+      "duration": 0.924,
+      "reverb": 0.22,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "hit-02-deep-boom",
+      "file": "hit-02-deep-boom.wav",
+      "category": "impact",
+      "description": "boom grave avec grondement \u2014 destruction",
+      "duration": 1.654,
+      "reverb": 0.28,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "hit-03-metal-clank",
+      "file": "hit-03-metal-clank.wav",
+      "category": "impact",
+      "description": "clang m\u00e9tallique inharmonique",
+      "duration": 1.254,
+      "reverb": 0.3,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "hit-04-glitch-break",
+      "file": "hit-04-glitch-break.wav",
+      "category": "impact",
+      "description": "cassure digitale, dropouts",
+      "duration": 0.814,
+      "reverb": 0.18,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "hit-05-shield",
+      "file": "hit-05-shield.wav",
+      "category": "impact",
+      "description": "d\u00e9flexion de bouclier \u2014 ting + sweep",
+      "duration": 1.254,
+      "reverb": 0.35,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "zap-01-pew",
+      "file": "zap-01-pew.wav",
+      "category": "zap",
+      "description": "pew classique descendant",
+      "duration": 0.544,
+      "reverb": 0.14,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "zap-02-laser-sweep",
+      "file": "zap-02-laser-sweep.wav",
+      "category": "zap",
+      "description": "laser montant avec vibrato",
+      "duration": 0.844,
+      "reverb": 0.22,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "zap-03-crackle",
+      "file": "zap-03-crackle.wav",
+      "category": "zap",
+      "description": "cr\u00e9pitements \u00e9lectriques al\u00e9atoires",
+      "duration": 0.974,
+      "reverb": 0.25,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "zap-04-warp-down",
+      "file": "zap-04-warp-down.wav",
+      "category": "zap",
+      "description": "warp descendant bitcrush\u00e9",
+      "duration": 0.954,
+      "reverb": 0.2,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "amb-01-riser",
+      "file": "amb-01-riser.wav",
+      "category": "amb",
+      "description": "mont\u00e9e bruit + saw \u2014 tension avant l'action",
+      "duration": 2.304,
+      "reverb": 0.45,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "amb-02-fall",
+      "file": "amb-02-fall.wav",
+      "category": "amb",
+      "description": "descente \u2014 \u00e9chec, chute",
+      "duration": 2.204,
+      "reverb": 0.45,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "amb-03-woosh",
+      "file": "amb-03-woosh.wav",
+      "category": "amb",
+      "description": "whoosh filtr\u00e9 \u2014 transition",
+      "duration": 1.604,
+      "reverb": 0.4,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "amb-04-bell",
+      "file": "amb-04-bell.wav",
+      "category": "amb",
+      "description": "grande cloche inharmonique \u2014 beaucoup d'espace",
+      "duration": 3.504,
+      "reverb": 0.6,
+      "dry": false,
+      "channels": 2
+    },
+    {
+      "name": "amb-05-pad",
+      "file": "amb-05-pad.wav",
+      "category": "amb",
+      "description": "accord de pad d\u00e9saccord\u00e9 \u2014 halo de r\u00e9compense",
+      "duration": 2.704,
+      "reverb": 0.52,
+      "dry": false,
+      "channels": 2
+    }
+  ]
+}

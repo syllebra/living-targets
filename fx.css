@@ -1,0 +1,623 @@
+/* ============================================================
+   LIVING TARGETS — shared target engine (styles)
+   Used by index.html (the wall of 40) and solo.html (one target).
+   One target = .stage > .halo + button.t + .shock + .sp
+   Sizing: .sh-* sets --w/--h/--bw; override inline for free resize.
+   ============================================================ */
+:root{
+  --bg:#04050a; --ink:#eaf2ff; --line:#1b2740;
+}
+
+/* ---------- shapes + sizes ---------- */
+.stage{
+  --w:calc(138px * var(--zoom,1));--h:calc(138px * var(--zoom,1));--bw:calc(7px * var(--zoom,1));
+  position:relative;display:grid;place-items:center;
+  width:100%;height:calc(188px * var(--zoom,1));   /* every caption sits on the same baseline */
+  /* entrance: hidden until the spawn animation is asked for.
+     .anim-ready is set by the script, so a JS failure can't blank the page. */
+}
+.anim-ready .stage{opacity:0;pointer-events:none}
+/* the whole target enters together (shape + halo + ring + sparks) */
+.anim-ready .stage.is-in{
+  opacity:1;
+  pointer-events:auto;
+  animation-name:var(--in, in-pop);
+  animation-duration:var(--in-dur, .74s);
+  animation-delay:var(--in-delay, 0ms);
+  animation-timing-function:cubic-bezier(.16,.9,.26,1);
+  animation-fill-mode:both;
+}
+/* once the entrance is over, drop the clip so shockwave + sparks are never
+   cropped by the iris/shutter/split variants (fill-mode keeps them otherwise) */
+.stage.is-in.in-done{clip-path:none!important;filter:none!important}
+/* caption follows the shape in */
+.anim-ready .cell figcaption{opacity:0;transition:opacity .35s ease}
+.anim-ready .cell.is-in figcaption{opacity:1}
+/* punctuation ring + flash of arrival (never while a hit is playing) */
+.stage.is-in:not(.is-hit) .shock{animation:shockIntro .8s ease-out var(--in-delay, 0ms) both}
+.stage.is-in:not(.is-hit) .flash{animation:flashIntro .5s ease-out var(--in-delay, 0ms) both}
+.sh-circle {--r:50%}
+.sh-round  {--r:calc(22px*var(--zoom,1))}
+.sh-square {--r:.05em;--w:calc(128px*var(--zoom,1));--h:calc(128px*var(--zoom,1))}
+.sh-rect   {--r:calc(16px*var(--zoom,1));--w:calc(196px*var(--zoom,1));--h:calc(112px*var(--zoom,1))}
+.sh-pill   {--r:999px;--w:calc(198px*var(--zoom,1));--h:calc(84px*var(--zoom,1))}
+.sh-tall   {--r:calc(16px*var(--zoom,1));--w:calc(104px*var(--zoom,1));--h:calc(172px*var(--zoom,1))}
+.sh-hex    {--clip:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);--w:calc(138px*var(--zoom,1));--h:calc(152px*var(--zoom,1));--bw:calc(8px*var(--zoom,1))}
+.sh-diamond{--clip:polygon(50% 0,100% 50%,50% 100%,0 50%);--w:calc(134px*var(--zoom,1));--h:calc(134px*var(--zoom,1));--bw:calc(8px*var(--zoom,1))}
+.sh-octa   {--clip:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%);--w:calc(136px*var(--zoom,1));--h:calc(136px*var(--zoom,1));--bw:calc(8px*var(--zoom,1))}
+.sh-star   {--clip:polygon(50% 0,61% 34%,98% 35%,69% 57%,79% 91%,50% 70%,21% 91%,31% 57%,2% 35%,39% 34%);--w:calc(144px*var(--zoom,1));--h:calc(144px*var(--zoom,1));--bw:calc(11px*var(--zoom,1))}
+.sh-tri    {--clip:polygon(50% 3%,100% 97%,0 97%);--w:calc(144px*var(--zoom,1));--h:calc(132px*var(--zoom,1));--bw:calc(10px*var(--zoom,1))}
+
+/* ---------- halo (glow behind) ---------- */
+.halo{
+  position:absolute;left:50%;top:50%;translate:-50% -50%;
+  width:var(--w);height:var(--h);
+  border-radius:var(--r,50%);
+  background:var(--c);
+  filter:blur(22px);
+  opacity:.34;
+  animation:haloPulse 2.8s ease-in-out infinite;
+  pointer-events:none;
+}
+.is-hit .halo{animation:haloBlast .6s ease-out both}
+
+/* ---------- the target ---------- */
+.t{
+  --cd:color-mix(in srgb, var(--c) 32%, transparent);
+  --cm:color-mix(in srgb, var(--c) 62%, transparent);
+  position:relative;
+  width:var(--w);height:var(--h);
+  padding:0;border:0;font:inherit;appearance:none;
+  border-radius:var(--r,50%);
+  clip-path:var(--clip);
+  background:var(--c);
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transform-origin:50% 58%;
+  will-change:transform,filter;
+  animation-name:var(--idle,none);
+  animation-duration:2.7s;
+  animation-timing-function:ease-in-out;
+  animation-iteration-count:infinite;
+  animation-fill-mode:both;
+}
+.is-hit .t{
+  animation-name:var(--hit,h-punch);
+  animation-duration:.55s;
+  animation-timing-function:cubic-bezier(.2,.9,.3,1);
+  animation-iteration-count:1;
+  animation-fill-mode:both;
+}
+.plate{
+  position:absolute;inset:var(--bw,6px);
+  border-radius:max(0px, calc(var(--r,50%) - var(--bw,6px)));
+  clip-path:var(--clip);
+  background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--c) 13%, #05060b), #05060b 72%);
+  overflow:hidden;
+  z-index:1;
+}
+.fx,.fx2{
+  position:absolute;inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+}
+.core{
+  position:absolute;inset:0;z-index:2;
+  display:grid;place-items:center;
+  pointer-events:none;
+}
+.flash{
+  position:absolute;inset:0;z-index:4;pointer-events:none;
+  border-radius:inherit;
+  background:radial-gradient(circle at 50% 50%, #fff 0 16%, color-mix(in srgb,#fff 40%, var(--c)) 48%, transparent 76%);
+  opacity:0;
+  mix-blend-mode:screen;
+}
+.is-hit .flash{animation:flashPop .34s ease-out both}
+
+/* ---------- hit accessories (outside the clipped button) ---------- */
+.shock{
+  position:absolute;left:50%;top:50%;translate:-50% -50%;
+  width:var(--w);height:var(--h);
+  border-radius:var(--r,50%);
+  border:3px solid #fff;
+  box-shadow:0 0 22px var(--c), inset 0 0 22px var(--c);
+  opacity:0;pointer-events:none;
+}
+.sh-hex .shock,.sh-diamond .shock,.sh-octa .shock,.sh-star .shock,.sh-tri .shock{
+  border-radius:50%;
+  width:calc(var(--h) * .96);height:calc(var(--h) * .96);
+}
+.is-hit .shock{animation:shockOut .66s cubic-bezier(.2,.9,.3,1) both}
+.sp{position:absolute;left:50%;top:50%;translate:-50% -50%;width:var(--w);height:var(--h);pointer-events:none}
+.sp b{
+  position:absolute;left:50%;top:50%;
+  width:7px;height:7px;margin:-3.5px 0 0 -3.5px;
+  border-radius:50%;background:#fff;
+  box-shadow:0 0 10px #fff, 0 0 24px var(--c);
+  opacity:0;
+}
+.is-hit .sp b{animation:sparkOut .62s cubic-bezier(.15,.9,.25,1) both}
+
+/* ---------- colours (max contrast on black) ---------- */
+.c-cyan   {--c:#22e8ff}
+.c-lime   {--c:#b4ff2e}
+.c-magenta{--c:#ff2bd6}
+.c-amber  {--c:#ffb020}
+.c-white  {--c:#ffffff}
+.c-red    {--c:#ff4a3d}
+.c-violet {--c:#a68bff}
+.c-aqua   {--c:#2dffc3}
+.c-blue   {--c:#4f8cff}
+.c-yellow {--c:#ffe93d}
+.c-orange {--c:#ff7a1a}
+.c-pink   {--c:#ff3ea5}
+.c-green  {--c:#39ff88}
+.c-teal   {--c:#12ffd0}
+
+/* ================= ENTRANCE KEYFRAMES =================
+   Applied to .stage (not .t) so they never fight the idle/hit
+   animations, and so halo, ring and sparks arrive with the shape. */
+@keyframes in-pop{
+  0%{opacity:0;transform:scale(.12);filter:blur(16px)}
+  55%{opacity:1;transform:scale(1.09);filter:blur(0)}
+  78%{transform:scale(.97)}
+  100%{opacity:1;transform:scale(1);filter:blur(0)}
+}
+@keyframes in-unfold{
+  0%{opacity:0;transform:scaleX(.02) scaleY(.45)}
+  55%{opacity:1;transform:scaleX(1.12) scaleY(1.02)}
+  78%{transform:scaleX(.98) scaleY(1)}
+  100%{opacity:1;transform:none}
+}
+@keyframes in-drop{
+  0%{opacity:0;transform:translateY(-110px) scale(.65);filter:blur(8px)}
+  45%{opacity:1;transform:translateY(10px) scale(1.06);filter:blur(0)}
+  64%{transform:translateY(-7px) scale(.99)}
+  82%{transform:translateY(3px)}
+  100%{opacity:1;transform:none}
+}
+@keyframes in-rise{
+  0%{opacity:0;transform:translateY(80px) scale(.5)}
+  55%{opacity:1;transform:translateY(-9px) scale(1.07)}
+  78%{transform:translateY(4px) scale(.99)}
+  100%{opacity:1;transform:none}
+}
+@keyframes in-spin{
+  0%{opacity:0;transform:rotate(-170deg) scale(.1)}
+  62%{opacity:1;transform:rotate(11deg) scale(1.07)}
+  84%{transform:rotate(-4deg) scale(.99)}
+  100%{opacity:1;transform:none}
+}
+@keyframes in-glitch{
+  0%{opacity:0;transform:translate(-46px,0) skewX(34deg)}
+  10%{opacity:1;transform:translate(28px,-7px) skewX(-20deg)}
+  22%{transform:translate(-19px,6px) skewX(14deg)}
+  34%{transform:translate(12px,-4px) skewX(-7deg)}
+  46%{transform:translate(-7px,2px) skewX(3deg)}
+  62%{transform:translate(3px,0) skewX(0)}
+  100%{opacity:1;transform:none}
+}
+@keyframes in-shutter{
+  0%{opacity:0;clip-path:inset(50% 0 50% 0)}
+  55%{opacity:1;clip-path:inset(0 0 0 0)}
+  100%{opacity:1;clip-path:inset(-45% -8%)}
+}
+@keyframes in-split{
+  0%{opacity:0;clip-path:inset(0 50% 0 50%)}
+  55%{opacity:1;clip-path:inset(0 0 0 0)}
+  100%{opacity:1;clip-path:inset(-45% -8%)}
+}
+@keyframes in-iris{
+  0%{opacity:0;clip-path:circle(0% at 50% 50%)}
+  70%{opacity:1;clip-path:circle(78% at 50% 50%)}
+  100%{opacity:1;clip-path:circle(130% at 50% 50%)}
+}
+@keyframes in-bloom{
+  0%{opacity:0;transform:scale(.35);filter:brightness(4) saturate(0)}
+  30%{opacity:1;filter:brightness(2.4) saturate(.4)}
+  100%{opacity:1;transform:none;filter:none}
+}
+@keyframes in-tilt{
+  0%{opacity:0;transform:perspective(520px) rotateY(82deg) scale(.86)}
+  60%{opacity:1;transform:perspective(520px) rotateY(-9deg) scale(1.02)}
+  100%{opacity:1;transform:none}
+}
+@keyframes in-stamp{
+  0%{opacity:0;transform:scale(2.6);filter:blur(12px)}
+  50%{opacity:1;transform:scale(.9);filter:blur(0)}
+  72%{transform:scale(1.04)}
+  100%{opacity:1;transform:none}
+}
+@keyframes in-warp{
+  0%{opacity:0;transform:scaleX(2.4) scaleY(.04)}
+  55%{opacity:1;transform:scale(1.08,.94)}
+  78%{transform:scale(.98,1.02)}
+  100%{opacity:1;transform:none}
+}
+@keyframes in-flicker{
+  0%,6%{opacity:0}
+  8%{opacity:1}
+  12%{opacity:.12}
+  16%{opacity:1}
+  20%{opacity:.28}
+  24%{opacity:1}
+  30%{opacity:.5}
+  36%,100%{opacity:1}
+}
+@keyframes in-slide{
+  0%{opacity:0;transform:translateX(-90px) scale(.85);filter:blur(6px)}
+  58%{opacity:1;transform:translateX(9px) scale(1.03);filter:blur(0)}
+  100%{opacity:1;transform:none}
+}
+@keyframes shockIntro{
+  0%{opacity:0;transform:scale(.55)}
+  25%{opacity:.9;transform:scale(.9)}
+  100%{opacity:0;transform:scale(2.1)}
+}
+@keyframes flashIntro{
+  0%{opacity:0}
+  18%{opacity:.55}
+  100%{opacity:0}
+}
+
+/* ================= IDLE KEYFRAMES ================= */
+@keyframes k-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.055)}}
+@keyframes k-breatheDeep{0%,100%{transform:scale(.89)}45%{transform:scale(1.1)}}
+@keyframes k-heartbeat{0%,100%{transform:scale(1)}9%{transform:scale(1.11)}17%{transform:scale(1.01)}27%{transform:scale(1.08)}40%{transform:scale(1)}}
+@keyframes k-floaty{0%,100%{transform:translateY(-6px)}50%{transform:translateY(6px)}}
+@keyframes k-wobble{0%,100%{transform:rotate(-2deg) scale(1.02)}50%{transform:rotate(2deg) scale(.98)}}
+@keyframes k-jelly{0%,100%{transform:scale(1)}25%{transform:scale(1.07,.94)}50%{transform:scale(.94,1.06)}75%{transform:scale(1.03,.97)}}
+@keyframes k-flicker{
+  0%,100%{opacity:1;filter:brightness(1)}7%{opacity:.5;filter:brightness(1.7)}
+  9%{opacity:1;filter:brightness(1)}12%{opacity:.32}15%{opacity:1}
+  58%{opacity:1}60%{opacity:.6;filter:brightness(1.5)}63%{opacity:1;filter:brightness(1)}}
+@keyframes k-blink{0%,40%,100%{opacity:1}48%,58%{opacity:.26}}
+@keyframes k-swing{0%,100%{transform:rotate(-3.4deg)}50%{transform:rotate(3.4deg)}}
+@keyframes k-zoomio{0%,100%{transform:scale(.9)}50%{transform:scale(1.1)}}
+@keyframes k-shiver{0%,100%{transform:translate(0,0)}20%{transform:translate(1.6px,-1.2px)}40%{transform:translate(-1.6px,1.2px)}60%{transform:translate(1.2px,1.6px)}80%{transform:translate(-1.2px,-1.6px)}}
+@keyframes k-squeeze{0%,100%{transform:scale(1,1)}50%{transform:scale(.92,1.09)}}
+@keyframes k-glowPulse{0%,100%{filter:brightness(1) saturate(1)}50%{filter:brightness(1.7) saturate(1.35)}}
+@keyframes k-twinkle{0%,100%{transform:scale(.96) rotate(-2deg);filter:brightness(1)}50%{transform:scale(1.07) rotate(3deg);filter:brightness(1.65)}}
+@keyframes k-tilt{0%,100%{transform:rotate(0) skewX(0)}30%{transform:rotate(-2.5deg) skewX(4deg)}70%{transform:rotate(2.5deg) skewX(-4deg)}}
+
+/* ================= HIT KEYFRAMES ================= */
+@keyframes h-punch{0%{transform:scale(1)}16%{transform:scale(1.22);filter:brightness(1.9)}44%{transform:scale(.94)}70%{transform:scale(1.03)}100%{transform:scale(1)}}
+@keyframes h-squash{0%{transform:scale(1,1)}14%{transform:scale(1.32,.7);filter:brightness(1.7)}40%{transform:scale(.86,1.18)}64%{transform:scale(1.07,.95)}100%{transform:scale(1,1)}}
+@keyframes h-shake{
+  0%,100%{transform:translate(0,0) rotate(0)}
+  10%{transform:translate(-10px,5px) rotate(-2.4deg)}
+  24%{transform:translate(9px,-6px) rotate(2.4deg)}
+  38%{transform:translate(-8px,-4px) rotate(-1.8deg)}
+  52%{transform:translate(6px,5px) rotate(1.6deg)}
+  68%{transform:translate(-4px,2px) rotate(-1deg)}
+  84%{transform:translate(2px,-1px) rotate(.5deg)}}
+@keyframes h-flash{0%{filter:brightness(1);transform:scale(1)}10%{filter:brightness(3.4) saturate(0) contrast(1.5);transform:scale(1.07)}55%{filter:brightness(1.3) saturate(1.7)}100%{filter:brightness(1);transform:scale(1)}}
+@keyframes h-spin{0%{transform:rotate(0) scale(1)}28%{transform:rotate(-24deg) scale(1.18);filter:brightness(1.6)}100%{transform:rotate(0) scale(1)}}
+@keyframes h-zap{
+  0%{filter:brightness(1);transform:scale(1)}
+  7%{filter:brightness(4.2) hue-rotate(35deg);transform:scale(1.1) rotate(2.5deg)}
+  19%{filter:brightness(1.05);transform:scale(.96)}
+  34%{filter:brightness(2.8)}
+  48%{filter:brightness(1)}
+  100%{filter:brightness(1);transform:scale(1)}}
+@keyframes h-glitch{
+  0%,100%{transform:translate(0) skewX(0);filter:none}
+  9%{transform:translate(-9px,3px) skewX(7deg);filter:hue-rotate(90deg) saturate(2.4)}
+  21%{transform:translate(8px,-4px) skewX(-6deg);filter:hue-rotate(-45deg)}
+  33%{transform:translate(-6px,2px) skewX(4deg);filter:hue-rotate(60deg)}
+  47%{transform:translate(5px,0) skewX(-2.5deg)}
+  61%{transform:translate(-2px,0) skewX(1deg)}
+  76%{transform:translate(1px,0)}}
+@keyframes h-invert{0%{filter:invert(0)}10%{filter:invert(1) brightness(1.6)}46%{filter:invert(1) brightness(1.6)}100%{filter:invert(0)}}
+@keyframes h-drop{0%{transform:scale(1)}18%{transform:scale(.6);filter:brightness(2.6)}55%{transform:scale(1.17)}74%{transform:scale(.96)}100%{transform:scale(1)}}
+@keyframes h-blow{0%{transform:scale(1);filter:blur(0) brightness(1)}20%{transform:scale(1.36);filter:blur(3px) brightness(2.3)}58%{transform:scale(1.05);filter:blur(0) brightness(1.05)}100%{transform:scale(1);filter:blur(0) brightness(1)}}
+@keyframes h-tremble{
+  0%,100%{transform:translate(0,0)}
+  8%{transform:translate(-6px,2px)}16%{transform:translate(6px,-3px)}
+  24%{transform:translate(-5px,-3px)}32%{transform:translate(5px,3px)}
+  45%{transform:translate(-3px,1px)}58%{transform:translate(3px,-2px)}
+  72%{transform:translate(-1.5px,1px)}86%{transform:translate(1px,0)}}
+@keyframes h-pop{0%{transform:scale(1)}14%{transform:scale(1.32);filter:brightness(1.8)}38%{transform:scale(.89)}58%{transform:scale(1.09)}78%{transform:scale(.98)}100%{transform:scale(1)}}
+
+/* ================= FX LAYERS ================= */
+.fx-glowCore .core::before{
+  content:'';width:27%;height:27%;border-radius:50%;background:var(--c);
+  box-shadow:0 0 18px var(--c), 0 0 48px var(--c), 0 0 90px var(--c);
+  animation:k-breathe 1.7s ease-in-out infinite;
+}
+.fx-rings .fx::before,.fx-rings .fx::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  border:3px solid var(--c);animation:ringOut 2.6s ease-out infinite;
+}
+.fx-rings .fx::after{animation-delay:1.3s}
+.fx-radar .fx{
+  background:conic-gradient(from 0deg, transparent 0 58%, color-mix(in srgb,var(--c) 40%,transparent) 88%, var(--c) 100%);
+  border-radius:50%;animation:spin 2.8s linear infinite;
+}
+.fx-radar .core::before{content:'';width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 16px var(--c)}
+.fx-scan .fx{
+  background:repeating-linear-gradient(0deg, color-mix(in srgb,var(--c) 16%,transparent) 0 2px, transparent 2px 9px);
+}
+.fx-scan .fx::after{
+  content:'';position:absolute;left:0;right:0;height:5px;background:var(--c);
+  box-shadow:0 0 16px var(--c), 0 0 46px var(--c);
+  animation:scanY 2.3s ease-in-out infinite;
+}
+.fx-orbit .fx::before,.fx-orbit .fx::after{
+  content:'';position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;
+  border-radius:50%;background:var(--c);box-shadow:0 0 16px var(--c);
+  animation:orbit 3.6s linear infinite;
+}
+.fx-orbit .fx::after{--or:52px;animation-direction:reverse;animation-duration:5.4s;background:#fff;box-shadow:0 0 18px var(--c)}
+.fx-dash .fx{
+  inset:13px;border:3px dashed color-mix(in srgb,var(--c) 88%,transparent);
+  border-radius:inherit;animation:spin 5.5s linear infinite;
+}
+.fx-stripes .fx{
+  inset:-45%;
+  background:repeating-linear-gradient(90deg, color-mix(in srgb,var(--c) 92%,#000) 0 13px, transparent 13px 31px);
+  transform:rotate(45deg);
+  animation:bgX31 1.1s linear infinite;
+  opacity:.92;
+}
+.fx-sheen .fx::after{
+  content:'';position:absolute;inset:-25%;
+  background:linear-gradient(100deg, transparent 36%, #fff 46%, var(--c) 51%, transparent 62%);
+  mix-blend-mode:screen;
+  animation:sheen 3.4s ease-in-out infinite;
+}
+.fx-dots .fx{
+  background-image:
+    radial-gradient(circle, var(--c) 0 3.1px, transparent 3.6px),
+    radial-gradient(circle, color-mix(in srgb,var(--c) 55%,transparent) 0 3.1px, transparent 3.6px);
+  background-size:20px 23px, 20px 23px;
+  background-position:0 0, 10px 11.5px;
+  animation:bgX20Y23 2.6s linear infinite;
+}
+.fx-cross .fx{animation:spin 10s linear infinite}
+.fx-cross .fx::before{
+  content:'';position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;
+  background:linear-gradient(90deg, var(--c) 0 33%, transparent 33% 67%, var(--c) 67%);
+  box-shadow:0 0 10px var(--c);
+}
+.fx-cross .fx::after{
+  content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;
+  background:linear-gradient(180deg, var(--c) 0 33%, transparent 33% 67%, var(--c) 67%);
+  box-shadow:0 0 10px var(--c);
+}
+.fx-cross .core::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 16px var(--c)}
+.fx-sunburst .fx{
+  background:repeating-conic-gradient(from 0deg, var(--c) 0 3.6deg, transparent 3.6deg 18deg);
+  animation:spin 9s linear infinite;
+}
+.fx-sunburst .fx2{background:radial-gradient(circle, #05060b 0 24%, transparent 54%)}
+.fx-sunburst .core::before{content:'';width:13px;height:13px;border-radius:50%;background:#fff;box-shadow:0 0 20px var(--c),0 0 44px var(--c)}
+.fx-spiral .fx{
+  background:repeating-conic-gradient(from 0deg, color-mix(in srgb,var(--c) 92%,transparent) 0 15deg, transparent 15deg 30deg);
+  animation:spin 5s linear infinite;
+  mask-image:radial-gradient(circle, #000 8%, transparent 70%);
+  -webkit-mask-image:radial-gradient(circle, #000 8%, transparent 70%);
+}
+.fx-plasma .fx{filter:blur(9px);opacity:.95}
+.fx-plasma .fx::before,.fx-plasma .fx::after{
+  content:'';position:absolute;width:72%;height:72%;border-radius:50%;background:var(--c);filter:blur(13px);
+}
+.fx-plasma .fx::before{left:2%;top:8%;animation:k-floaty 3.4s ease-in-out infinite}
+.fx-plasma .fx::after{right:2%;bottom:6%;background:color-mix(in srgb,var(--c) 45%,#ff00ff);animation:k-floaty 4.6s ease-in-out infinite reverse}
+.fx-aperture .core::before{
+  content:'';width:72%;height:72%;border-radius:50%;
+  border:3px solid var(--c);box-shadow:0 0 18px var(--c), inset 0 0 18px var(--c);
+  animation:aperture 2.8s ease-in-out infinite;
+}
+.fx-ladder .fx{
+  background:repeating-linear-gradient(0deg, var(--c) 0 5px, transparent 5px 27px);
+  animation:bgY27 1.5s linear infinite;opacity:.9;
+  mask-image:linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+.fx-sonar .fx::before,.fx-sonar .fx::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  border:2px solid var(--c);animation:ringOut 2.8s ease-out infinite;
+}
+.fx-sonar .fx::after{animation-delay:1.4s}
+.fx-sonar .core::before{content:'';width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 20px var(--c)}
+.fx-grid .fx{
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--c) 42%,transparent) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, color-mix(in srgb,var(--c) 42%,transparent) 1.5px, transparent 1.5px);
+  background-size:24px 24px;
+  animation:bgX24Y24 2.3s linear infinite;
+}
+.fx-spot .fx{
+  background:radial-gradient(circle at 50% 44%, #fff 0 5%, color-mix(in srgb,var(--c) 70%,#fff) 24%, transparent 64%);
+  animation:k-breatheDeep 2.5s ease-in-out infinite;
+}
+.fx-bars .fx{
+  background-image:repeating-linear-gradient(90deg, var(--c) 0 5px, transparent 5px 21px);
+  animation:bgX21 1.2s linear infinite;
+}
+.fx-strobe .fx,.fx-strobe .fx2{
+  top:0;bottom:0;left:-55%;right:-55%;
+  animation:strobeSkew 2.4s ease-in-out infinite;
+}
+.fx-strobe .fx{background:radial-gradient(ellipse 28% 82% at 50% 50%, #fff, var(--c) 42%, transparent 74%)}
+.fx-strobe .fx2{background:radial-gradient(ellipse 28% 82% at 50% 50%, #fff, var(--c) 42%, transparent 74%);animation-delay:-1.2s;mix-blend-mode:screen}
+.fx-wave .fx{
+  background:repeating-linear-gradient(0deg, color-mix(in srgb,var(--c) 22%,transparent) 0 1px, transparent 1px 11px);
+}
+.fx-wave .fx::before,.fx-wave .fx::after,
+.fx-wave .fx2::before,.fx-wave .fx2::after{
+  content:'';position:absolute;left:-6%;right:-6%;height:2.5px;
+  background:var(--c);box-shadow:0 0 12px var(--c), 0 0 30px var(--c);
+  animation:waveTrace 0.9s ease-in-out infinite;
+}
+.fx-wave .fx::before{--y:38%;animation-delay:0s}
+.fx-wave .fx::after{--y:50%;animation-delay:-.3s;background:#fff;box-shadow:0 0 14px #fff,0 0 34px var(--c)}
+.fx-wave .fx2::before{--y:62%;animation-delay:-.6s}
+.fx-wave .fx2::after{--y:50%;animation-delay:-.15s;opacity:.55;height:7px;filter:blur(5px)}
+.fx-eclipse .fx{animation:spin 13s linear infinite}
+.fx-eclipse .fx::before{
+  content:'';position:absolute;inset:17%;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%, #fff 0 18%, var(--c) 62%, color-mix(in srgb,var(--c) 45%,transparent) 100%);
+  box-shadow:0 0 34px var(--c);
+}
+.fx-eclipse .fx::after{
+  content:'';position:absolute;left:36%;top:15%;width:58%;height:58%;
+  border-radius:50%;background:#05060b;
+}
+.fx-flare .fx{
+  background:conic-gradient(from 0deg, var(--cm) 0 3deg, transparent 3deg 16deg);
+  animation:spin 9s linear infinite;
+  mask-image:radial-gradient(circle, #000 4%, transparent 80%);
+  -webkit-mask-image:radial-gradient(circle, #000 4%, transparent 80%);
+}
+.fx-flare .core::before{
+  content:'';width:24%;height:24%;border-radius:50%;background:#fff;
+  box-shadow:0 0 22px var(--c), 0 0 60px var(--c);
+  animation:k-breathe 1.9s ease-in-out infinite;
+}
+.fx-ping .fx::before,.fx-ping .fx::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  border:3px solid var(--c);animation:ringOut 2.2s ease-out infinite;
+}
+.fx-ping .fx::after{animation-delay:1.1s}
+.fx-ping .core::before{content:'';width:15%;height:15%;border-radius:50%;background:var(--c);box-shadow:0 0 20px var(--c)}
+.fx-pond .fx::before{
+  content:'';position:absolute;inset:-22%;border-radius:50%;
+  background:repeating-radial-gradient(circle, transparent 0 13px, var(--c) 13px 16px);
+  animation:pondPulse 3.4s ease-out infinite;
+}
+.fx-pond .core::before{content:'';width:11px;height:11px;border-radius:50%;background:#fff;box-shadow:0 0 22px var(--c)}
+.fx-slot .fx{
+  background-image:
+    repeating-linear-gradient(0deg, var(--c) 0 12px, transparent 12px 35px),
+    repeating-linear-gradient(90deg, transparent 0 33px, #05060b 33px 39px);
+  animation:bgY35 .85s linear infinite;
+}
+.fx-inner .fx{
+  inset:19%;border:3px solid var(--c);border-radius:4px;
+  animation:inSquare 2.6s ease-in-out infinite;opacity:.95;
+}
+.fx-inner .core::before{content:'';width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 16px var(--c)}
+.fx-comet .fx{
+  background:conic-gradient(from 0deg, transparent 0 62%, color-mix(in srgb,var(--c) 45%,transparent) 86%, var(--c) 96%, #fff 100%);
+  border-radius:50%;animation:spin 1.6s linear infinite;filter:blur(6px);
+}
+.fx-comet .fx2{border-radius:inherit;animation:spin 1.6s linear infinite}
+.fx-comet .fx2::after{
+  content:'';position:absolute;left:50%;top:6%;width:15px;height:15px;margin-left:-7.5px;
+  border-radius:50%;background:#fff;box-shadow:0 0 16px #fff, 0 0 40px var(--c), 0 0 70px var(--c);
+}
+.fx-matrix .fx{
+  background-image:
+    radial-gradient(circle, #fff 0 1.6px, transparent 2.2px),
+    radial-gradient(circle, var(--c) 0 1.6px, transparent 2.2px);
+  background-size:17px 9px, 17px 9px;
+  background-position:0 0, 0 4.5px;
+  animation:bgY9 0.55s linear infinite;
+  mask-image:linear-gradient(180deg, #000 4%, #000 66%, transparent 96%);
+  -webkit-mask-image:linear-gradient(180deg, #000 4%, #000 66%, transparent 96%);
+}
+.fx-vortex .fx{
+  background:repeating-conic-gradient(from 0deg, var(--c) 0 10deg, transparent 10deg 34deg);
+  animation:spin 2.6s linear infinite;filter:blur(1.5px);opacity:.95;
+  mask-image:radial-gradient(circle, transparent 8%, #000 30%, #000 62%, transparent 88%);
+  -webkit-mask-image:radial-gradient(circle, transparent 8%, #000 30%, #000 62%, transparent 88%);
+}
+.fx-vortex .core::before{content:'';width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 0 20px var(--c),0 0 44px var(--c);animation:k-breathe 1.5s ease-in-out infinite}
+.fx-chase .fx2::after{
+  content:'';position:absolute;top:0;bottom:0;width:28%;
+  background:linear-gradient(90deg, transparent, var(--c), transparent);
+  filter:blur(2px);
+  animation:chaseX 2.1s ease-in-out infinite alternate;
+}
+
+.fx-chevron .fx{
+  background:
+    repeating-linear-gradient(115deg, var(--c) 0 9px, transparent 9px 17px),
+    repeating-linear-gradient(65deg,  var(--c) 0 9px, transparent 9px 17px);
+  animation:bgX34 1.4s linear infinite;
+  mask-image:radial-gradient(90% 150% at 50% 50%, #000 40%, transparent 78%);
+  -webkit-mask-image:radial-gradient(90% 150% at 50% 50%, #000 40%, transparent 78%);
+}
+.fx-goo .fx{filter:blur(11px)}
+.fx-goo .fx::before,.fx-goo .fx::after{
+  content:'';position:absolute;width:64%;height:64%;border-radius:50%;background:var(--c);
+}
+.fx-goo .fx::before{left:6%;top:10%;animation:gooA 4.2s ease-in-out infinite}
+.fx-goo .fx::after{right:6%;bottom:10%;animation:gooB 5.1s ease-in-out infinite}
+.fx-vscan .fx{
+  background:repeating-linear-gradient(90deg, color-mix(in srgb,var(--c) 14%,transparent) 0 2px, transparent 2px 7px);
+}
+.fx-vscan .fx::after{
+  content:'';position:absolute;top:-10%;bottom:-10%;width:14px;left:0;
+  background:linear-gradient(90deg, transparent, #fff 45%, var(--c) 60%, transparent);
+  filter:blur(1px);animation:vscanX 2.2s ease-in-out infinite;
+}
+.fx-halftone .fx{
+  background-image:radial-gradient(var(--c) 0 35%, transparent 42%);
+  background-size:17px 17px;
+  animation:halftoneGrow 3s ease-in-out infinite;
+  opacity:.95;
+}
+/* ================= FX MOVEMENT KEYFRAMES ================= */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes scanY{0%,100%{top:6%;opacity:.25}50%{top:86%;opacity:1}}
+@keyframes orbit{from{transform:rotate(0) translateX(var(--or,40px))}to{transform:rotate(360deg) translateX(var(--or,40px))}}
+@keyframes ringOut{0%{transform:scale(.2);opacity:0}18%{opacity:1}100%{transform:scale(1.03);opacity:0}}
+@keyframes sheen{0%{transform:translateX(-75%)}55%,100%{transform:translateX(75%)}}
+@keyframes aperture{0%,100%{transform:scale(.32);opacity:.95}50%{transform:scale(1);opacity:.7}}
+@keyframes pondPulse{0%{transform:scale(.5);opacity:.95}100%{transform:scale(1.45);opacity:0}}
+@keyframes chaseX{from{left:-12%}to{left:84%}}
+@keyframes bgX15{to{background-position:15px 0}}
+@keyframes bgX17{to{background-position:17px 0}}
+@keyframes bgX19Y19{to{background-position:19px 19px}}
+@keyframes bgX21{to{background-position:21px 0}}
+@keyframes bgX24Y24{to{background-position:24px 24px}}
+@keyframes bgX31{to{background-position:31px 0}}
+@keyframes bgY27{to{background-position:0 27px}}
+@keyframes bgY35{to{background-position:0 35px}}
+@keyframes bgY9{to{background-position:0 9px}}
+@keyframes bgX20Y23{to{background-position:20px 23px, 30px 34.5px}}
+@keyframes waveTrace{0%,100%{top:calc(var(--y) - 26%)}25%{top:calc(var(--y) + 20%)}50%{top:calc(var(--y) - 14%)}75%{top:calc(var(--y) + 26%)}}
+@keyframes inSquare{0%,100%{inset:30%;border-width:3px}50%{inset:11%;border-width:4px}}
+@keyframes bgX34{to{background-position:34px 0}}
+@keyframes gooA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(38%,24%) scale(1.35)}}
+@keyframes gooB{0%,100%{transform:translate(0,0) scale(1.25)}50%{transform:translate(-36%,-22%) scale(.8)}}
+@keyframes vscanX{0%,100%{left:-6%}50%{left:92%}}
+@keyframes halftoneGrow{0%,100%{background-size:13px 13px;opacity:.5}50%{background-size:23px 23px;opacity:1}}
+@keyframes strobeSkew{0%,100%{transform:translateX(-38%) skewX(-12deg);opacity:.5}50%{transform:translateX(38%) skewX(12deg);opacity:1}}
+@keyframes haloPulse{0%,100%{opacity:.3;scale:.94}50%{opacity:.62;scale:1.08}}
+@keyframes haloBlast{0%{opacity:.35;scale:1}30%{opacity:.78;scale:1.14}100%{opacity:.3;scale:1}}
+@keyframes flashPop{0%{opacity:0}16%{opacity:.72}100%{opacity:0}}
+@keyframes shockOut{0%{opacity:.95;transform:scale(.9)}100%{opacity:0;transform:scale(1.85)}}
+@keyframes sparkOut{
+  0%{opacity:0;transform:rotate(var(--a)) translateX(10px) scale(.3)}
+  12%{opacity:1}
+  100%{opacity:0;transform:rotate(var(--a)) translateX(var(--d,72px)) scale(.85)}
+}
+
+/* ============================================================
+   SOLO MODE — the stage is positioned by its own box instead of
+   filling a grid cell, so --w / --h can be set to anything.
+   ============================================================ */
+.stage.solo{
+  width:calc(var(--w) + 12px);
+  height:calc(var(--h) + 12px);
+  place-items:center;
+  will-change:width,height;
+}
+/* a little air around the shape so glow / sparks aren't clipped by the box */
+.stage.solo .halo,.stage.solo .t{}
+
+/* frames rendered by solo.html */
+.solo-wrap{position:absolute;left:0;top:0;touch-action:none;cursor:grab}
+.solo-wrap.dragging{cursor:grabbing}
+.solo-wrap .stage{cursor:inherit}
+.solo-hint{
+  position:absolute;left:50%;bottom:26px;translate:-50% 0;z-index:5;
+  font:600 10px/1.6 ui-monospace,Menlo,monospace;letter-spacing:.14em;
+  text-transform:uppercase;color:#4a5a75;text-align:center;pointer-events:none;
+  transition:opacity .4s;
+}

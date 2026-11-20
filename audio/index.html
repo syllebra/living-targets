@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARCADE SFX KIT</title>
+<style>
+:root{--bg:#05060b;--ink:#e8f0ff;--c:#22e8ff;--line:#1c2841;--dim:#67789a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background-image:radial-gradient(900px 500px at 10% -10%,#0f1b33,transparent 60%),
+                   radial-gradient(900px 600px at 90% -5%,#1d0f2e,transparent 55%);
+  background-attachment:fixed;padding-bottom:46px}
+header{position:sticky;top:0;z-index:20;padding:14px clamp(12px,3vw,36px) 10px;
+  background:rgba(5,6,11,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.row1{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;justify-content:space-between}
+h1{margin:0;font-size:clamp(15px,1.9vw,22px);letter-spacing:.24em;font-weight:800;color:#fff}
+h1 span{color:var(--c)}
+.sub{margin:5px 0 0;font:600 10px/1.4 ui-monospace,Menlo,monospace;color:var(--dim);
+  letter-spacing:.13em;text-transform:uppercase}
+.ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{appearance:none;cursor:pointer;background:#0a1020;color:#c8daf8;border:1px solid #26314c;
+  padding:8px 12px;border-radius:999px;font:700 10px/1.2 ui-monospace,Menlo,monospace;
+  letter-spacing:.13em;transition:.14s}
+.pill:hover{border-color:#41578a;color:#fff;background:#122040}
+.pill.on{background:var(--c);color:#03121a;border-color:var(--c);box-shadow:0 0 20px rgba(34,232,255,.4)}
+.pill.hot{background:#ff2bd6;color:#12000d;border-color:#ff2bd6;box-shadow:0 0 20px rgba(255,43,214,.4)}
+.vol{display:flex;align-items:center;gap:7px;font:600 10px/1 ui-monospace,Menlo,monospace;color:#7b8ca8;letter-spacing:.12em}
+input[type=range]{width:104px;accent-color:var(--c)}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.chip{cursor:pointer;background:#070c16;color:#7f92b3;border:1px solid #1e2942;
+  padding:6px 11px;border-radius:999px;font:700 9.5px/1 ui-monospace,Menlo,monospace;
+  letter-spacing:.14em;text-transform:uppercase;transition:.14s}
+.chip:hover{color:#dce9ff;border-color:#35486e}
+.chip.on{background:#16233c;color:#fff;border-color:#3d5b91}
+.chip b{color:var(--c);font-weight:800;margin-left:4px}
+
+main{padding:22px clamp(12px,3vw,36px);max-width:1240px;margin-inline:auto;
+  display:grid;gap:9px;grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.card{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center;
+  background:#080c16;border:1px solid var(--line);border-radius:13px;padding:11px 13px;
+  cursor:pointer;transition:.14s;position:relative;overflow:hidden}
+.card:hover{border-color:#3a5480;background:#0c1322}
+.card.play{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 26px rgba(34,232,255,.16)}
+.key{width:31px;height:31px;display:grid;place-items:center;border-radius:8px;
+  background:#101a2e;color:var(--c);font:800 12px/1 ui-monospace,Menlo,monospace;border:1px solid #23304a}
+.card.play .key{background:var(--c);color:#03121a}
+.meta{display:grid;gap:2px;min-width:0}
+.name{font:800 11.5px/1.25 ui-monospace,Menlo,monospace;letter-spacing:.09em;color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.desc{font:500 10px/1.35 ui-monospace,Menlo,monospace;color:var(--dim);letter-spacing:.03em}
+.badge{font:800 8.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:#4a5f85;
+  border:1px solid #1e2942;border-radius:5px;padding:3px 5px;white-space:nowrap}
+.badge.wet{color:#22e8ff;border-color:#1d4a5e}
+canvas{grid-column:1/-1;width:100%;height:38px;display:block;border-radius:7px;background:#05070d}
+.legend{padding:0 24px;max-width:1240px;margin:0 auto 14px;display:flex;gap:18px;flex-wrap:wrap;
+  font:600 9.5px/1.6 ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#4d5b73}
+.legend b{color:#8fa3c4;font-weight:700}
+.foot{padding:8px 24px 30px;text-align:center;font:500 10px/1.8 ui-monospace,Menlo,monospace;
+  letter-spacing:.1em;text-transform:uppercase;color:#4d5b73}
+kbd{border:1px solid currentColor;border-radius:4px;padding:1px 5px;font-size:9px;opacity:.75}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="row1">
+    <div>
+      <h1>ARCADE <span>SFX</span> KIT</h1>
+      <p class="sub" id="sub">chargement…</p>
+    </div>
+    <div class="ctrls">
+      <button class="pill" id="abBtn">DRY / WET</button>
+      <button class="pill" id="burst">RAFALE ×12</button>
+      <button class="pill" id="seq">ENCHAÎNER</button>
+      <label class="vol">VOL <input type="range" id="vol" min="0" max="100" value="72"></label>
+    </div>
+  </div>
+  <div class="filters" id="filters"></div>
+</header>
+
+<div class="legend">
+  <span><b>clic</b> jouer</span><span><b>1–9 0</b> premiers sons</span>
+  <span><b>maj+clic</b> boucle</span><span><b>D</b> dry / wet</span>
+  <span><b>rafale</b> = test de densité</span>
+</div>
+
+<main id="grid"></main>
+
+<footer class="foot" id="foot"></footer>
+
+<script>
+/* ------------------------------------------------------------------ state */
+let MANIFEST = null, sounds = [], cards = [];
+let filter = 'all', dryMode = false;
+const BASE = '';                       // page lives in the audio folder
+
+/* ------------------------------------------------------------------ audio */
+let ctx, master, comp;
+const bufCache = new Map();            // 'name|dry' -> AudioBuffer
+
+function ensureAudio() {
+  if (!ctx) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC();
+    master = ctx.createGain();
+    master.gain.value = document.getElementById('vol').value / 100;
+    comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -12; comp.knee.value = 10;
+    comp.ratio.value = 4; comp.attack.value = 0.003; comp.release.value = 0.15;
+    master.connect(comp).connect(ctx.destination);
+  }
+  if (ctx.state === 'suspended') ctx.resume();
+  return ctx;
+}
+
+async function getBuffer(name, dry) {
+  const key = name + (dry ? '|dry' : '|wet');
+  if (bufCache.has(key)) return bufCache.get(key);
+  ensureAudio();
+  const base = dry ? BASE + 'dry/' + name : BASE + name;
+  /* wav is lossless, mp3 keeps the published repo light */
+  let lastErr = null;
+  for (const ext of ['.wav', '.mp3']) {
+    try {
+      const r = await fetch(base + ext);
+      if (!r.ok) { lastErr = new Error(base + ext + ' → ' + r.status); continue; }
+      const b = await ctx.decodeAudioData(await r.arrayBuffer());
+      bufCache.set(key, b);
+      return b;
+    } catch (err) { lastErr = err; }
+  }
+  throw lastErr || new Error('introuvable: ' + name);
+}
+
+const voices = new Set();
+function play(name, { when = 0, rate = 1, gain = 1, pan = 0, dry = dryMode } = {}) {
+  ensureAudio();
+  const key = name + (dry ? '|dry' : '|wet');
+  const buf = bufCache.get(key);
+  if (!buf) { getBuffer(name, dry).then(() => {}).catch(() => {}); return null; }
+  if (voices.size > 28) return null;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.playbackRate.value = rate;
+  const g = ctx.createGain();
+  g.gain.value = gain;
+  let node = src;
+  if (ctx.createStereoPanner) {
+    const p = ctx.createStereoPanner();
+    p.pan.value = pan;
+    src.connect(p); node = p;
+  }
+  node.connect(g).connect(master);
+  src.start((when || ctx.currentTime) + 0);
+  voices.add(src);
+  src.onended = () => voices.delete(src);
+  return buf.duration;
+}
+
+/* ------------------------------------------------------------------ build */
+const CAT_LABEL = { click:'clicks', ui:'ui', reward:'rewards', impact:'impacts',
+                    zap:'zaps', amb:'ambience' };
+const CAT_COLOR = { click:'#22e8ff', ui:'#2dffc3', reward:'#ffe93d',
+                    impact:'#ff4a3d', zap:'#ff2bd6', amb:'#a68bff' };
+
+async function boot() {
+  const r = await fetch('manifest.json');
+  MANIFEST = await r.json();
+  sounds = MANIFEST.sounds;
+
+  document.title = `ARCADE SFX KIT — ${MANIFEST.count} sons`;
+  document.getElementById('sub').textContent =
+    `${MANIFEST.count} one-shots · 48 kHz · réverbération algorithmique · sprite ${MANIFEST.sprite.duration}s`;
+
+  // category chips
+  const counts = {};
+  sounds.forEach(s => counts[s.category] = (counts[s.category] || 0) + 1);
+  const fbox = document.getElementById('filters');
+  const mk = (id, label, n) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (id === 'all' ? ' on' : '');
+    b.dataset.cat = id;
+    b.innerHTML = `${label}<b>${n}</b>`;
+    b.style.setProperty('--c', CAT_COLOR[id] || 'var(--c)');
+    b.addEventListener('click', () => {
+      filter = id;
+      [...fbox.children].forEach(c => c.classList.toggle('on', c.dataset.cat === id));
+      render();
+    });
+    fbox.appendChild(b);
+  };
+  mk('all', 'tout', sounds.length);
+  Object.keys(counts).forEach(c => mk(c, CAT_LABEL[c] || c, counts[c]));
+
+  render();
+  // preload everything for instant audition
+  for (const s of sounds) {
+    getBuffer(s.name, false).catch(() => {});
+  }
+  document.getElementById('foot').innerHTML =
+    `fichiers dans <kbd>audio/</kbd> · versions sèches dans <kbd>audio/dry/</kbd> · ` +
+    `<kbd>clicksprite.wav</kbd> pour un runtime de jeu · régénérer : ` +
+    `<kbd>gen-arcade-clicks.py</kbd>`;
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  cards = [];
+  const list = sounds.filter(s => filter === 'all' || s.category === filter);
+  list.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const color = CAT_COLOR[s.category] || '#22e8ff';
+    card.style.setProperty('--c', color);
+    const kb = i < 10 ? String((i + 1) % 10) : '';
+    card.innerHTML = `
+      <div class="key">${kb || '·'}</div>
+      <div class="meta">
+        <div class="name">${s.name}</div>
+        <div class="desc">${s.description}</div>
+      </div>
+      <div class="badge ${s.reverb > 0 ? 'wet' : ''}">${s.reverb > 0 ? 'WET ' + s.reverb.toFixed(2) : 'DRY'}</div>
+      <canvas width="320" height="38"></canvas>`;
+    grid.appendChild(card);
+
+    const canvas = card.querySelector('canvas');
+    const entry = { card, canvas, s };
+
+    card.addEventListener('click', e => {
+      if (e.shiftKey) {        // shift+click = loop
+        entry.loop = !entry.loop;
+        card.classList.toggle('hot', entry.loop);
+        if (entry.loop) {
+          const step = () => {
+            if (!entry.loop) return;
+            play(s.name, { gain: 0.9 });
+            entry.timer = setTimeout(step, 420);
+          };
+          step();
+        } else {
+          clearTimeout(entry.timer);
+        }
+        return;
+      }
+      pulse(entry);
+      play(s.name, { gain: 0.92 });
+    });
+
+    cards.push(entry);
+    getBuffer(s.name, false).then(b => draw(canvas, b, color)).catch(() => {});
+  });
+  document.getElementById('foot') && null;
+}
+
+function pulse(entry) {
+  entry.card.classList.add('play');
+  clearTimeout(entry.pt);
+  entry.pt = setTimeout(() => entry.card.classList.remove('play'), 230);
+}
+
+/* waveform */
+function draw(canvas, buf, color) {
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || 300, h = canvas.clientHeight || 38;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  const g = canvas.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.clearRect(0, 0, w, h);
+
+  // mix to mono for display
+  const chs = buf.numberOfChannels;
+  const data = [];
+  const ch0 = buf.getChannelData(0);
+  const ch1 = chs > 1 ? buf.getChannelData(1) : null;
+  for (let i = 0; i < ch0.length; i++) {
+    data.push(ch1 ? (ch0[i] + ch1[i]) * 0.5 : ch0[i]);
+  }
+
+  const step = Math.max(1, Math.floor(data.length / w));
+  const mid = h / 2;
+  g.strokeStyle = color || '#22e8ff';
+  g.globalAlpha = .9;
+  g.lineWidth = 1;
+  g.beginPath();
+  for (let x = 0; x < w; x++) {
+    let pk = 0;
+    for (let j = 0; j < step; j++) {
+      const v = data[x * step + j] || 0;
+      if (Math.abs(v) > Math.abs(pk)) pk = v;
+    }
+    const y = mid - pk * h * 0.44 * 1.55;
+    x === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
+  }
+  g.stroke();
+
+  // reverb tail region hint: last 35 %
+  g.globalAlpha = 1;
+  g.strokeStyle = 'rgba(255,255,255,.06)';
+  g.beginPath(); g.moveTo(0, mid); g.lineTo(w, mid); g.stroke();
+}
+
+/* ------------------------------------------------------------------ transport */
+document.getElementById('vol').addEventListener('input', e => {
+  ensureAudio();
+  master.gain.value = e.target.value / 100;
+});
+
+/* A/B dry vs wet */
+const abBtn = document.getElementById('abBtn');
+function setDry(v) {
+  dryMode = v;
+  abBtn.classList.toggle('on', !v);
+  abBtn.textContent = v ? 'DRY' : 'WET';
+  // preload the matching set
+  sounds.forEach(s => getBuffer(s.name, v).catch(() => {}));
+}
+abBtn.addEventListener('click', () => setDry(!dryMode));
+
+document.getElementById('burst').addEventListener('click', () => {
+  ensureAudio();
+  // 12 hits, 78 ms apart, cycling the kit: the density test
+  const list = cards.length ? cards.map(c => c.s.name) : sounds.map(s => s.name);
+  for (let i = 0; i < 12; i++) {
+    play(list[i % list.length], { when: ctx.currentTime + i * 0.078, gain: 0.85 });
+  }
+});
+
+let seqTimer = null, seqBtn = document.getElementById('seq');
+seqBtn.addEventListener('click', () => {
+  if (seqTimer) {
+    clearInterval(seqTimer); seqTimer = null;
+    seqBtn.classList.remove('on');
+    return;
+  }
+  seqBtn.classList.add('on');
+  let i = 0;
+  const list = cards.length ? cards.map(c => c.s.name) : sounds.map(s => s.name);
+  seqTimer = setInterval(() => {
+    const name = list[i % list.length];
+    play(name, { gain: 0.9 });
+    const e = cards.find(c => c.s.name === name);
+    if (e) pulse(e);
+    i++;
+  }, 760);
+});
+
+addEventListener('keydown', e => {
+  if (e.key === 'd' || e.key === 'D') { setDry(!dryMode); return; }
+  const n = '1234567890'.indexOf(e.key);
+  if (n >= 0) {
+    const entry = cards[n];
+    if (entry) { play(entry.s.name, { gain: 0.92 }); pulse(entry); }
+  }
+});
+
+addEventListener('resize', () => {
+  cards.forEach(({ canvas, s }) => {
+    const key = s.name + '|wet';
+    if (bufCache.has(key)) draw(canvas, bufCache.get(key), CAT_COLOR[s.category]);
+  });
+});
+
+boot().catch(err => {
+  document.getElementById('sub').textContent = '⚠ ' + err.message;
+  document.getElementById('sub').style.color = '#ff5a5a';
+});
+</script>
+</body>
+</html>

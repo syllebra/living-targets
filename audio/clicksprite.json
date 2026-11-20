@@ -1,0 +1,336 @@
+{
+  "sampleRate": 48000,
+  "channels": 2,
+  "sounds": [
+    {
+      "name": "click-01-pop",
+      "category": "click",
+      "offsetFrames": 0,
+      "duration": 0.454
+    },
+    {
+      "name": "click-02-tick",
+      "category": "click",
+      "offsetFrames": 21792,
+      "duration": 0.045
+    },
+    {
+      "name": "click-03-coin",
+      "category": "click",
+      "offsetFrames": 23952,
+      "duration": 0.632
+    },
+    {
+      "name": "click-04-zap",
+      "category": "click",
+      "offsetFrames": 54288,
+      "duration": 0.489
+    },
+    {
+      "name": "click-05-snap",
+      "category": "click",
+      "offsetFrames": 77760,
+      "duration": 0.554
+    },
+    {
+      "name": "click-06-blip",
+      "category": "click",
+      "offsetFrames": 104352,
+      "duration": 0.529
+    },
+    {
+      "name": "click-07-thud",
+      "category": "click",
+      "offsetFrames": 129744,
+      "duration": 0.624
+    },
+    {
+      "name": "click-08-chime",
+      "category": "click",
+      "offsetFrames": 159696,
+      "duration": 1.304
+    },
+    {
+      "name": "click-09-glitch",
+      "category": "click",
+      "offsetFrames": 222288,
+      "duration": 0.414
+    },
+    {
+      "name": "click-10-volley",
+      "category": "click",
+      "offsetFrames": 242160,
+      "duration": 0.605
+    },
+    {
+      "name": "click-11-tock",
+      "category": "click",
+      "offsetFrames": 271201,
+      "duration": 0.384
+    },
+    {
+      "name": "click-12-clack",
+      "category": "click",
+      "offsetFrames": 289633,
+      "duration": 0.384
+    },
+    {
+      "name": "click-13-marimba",
+      "category": "click",
+      "offsetFrames": 308065,
+      "duration": 0.854
+    },
+    {
+      "name": "click-14-bubble",
+      "category": "click",
+      "offsetFrames": 349057,
+      "duration": 0.584
+    },
+    {
+      "name": "click-15-digi",
+      "category": "click",
+      "offsetFrames": 377089,
+      "duration": 0.444
+    },
+    {
+      "name": "click-16-steel",
+      "category": "click",
+      "offsetFrames": 398401,
+      "duration": 0.804
+    },
+    {
+      "name": "ui-01-soft-press",
+      "category": "ui",
+      "offsetFrames": 436993,
+      "duration": 0.524
+    },
+    {
+      "name": "ui-02-hover",
+      "category": "ui",
+      "offsetFrames": 462145,
+      "duration": 0.06
+    },
+    {
+      "name": "ui-03-toggle-on",
+      "category": "ui",
+      "offsetFrames": 465025,
+      "duration": 0.584
+    },
+    {
+      "name": "ui-04-toggle-off",
+      "category": "ui",
+      "offsetFrames": 493057,
+      "duration": 0.584
+    },
+    {
+      "name": "ui-05-confirm",
+      "category": "ui",
+      "offsetFrames": 521089,
+      "duration": 0.764
+    },
+    {
+      "name": "ui-06-cancel",
+      "category": "ui",
+      "offsetFrames": 557761,
+      "duration": 0.664
+    },
+    {
+      "name": "reward-01-powerup",
+      "category": "reward",
+      "offsetFrames": 589633,
+      "duration": 1.174
+    },
+    {
+      "name": "reward-02-combo",
+      "category": "reward",
+      "offsetFrames": 645985,
+      "duration": 1.054
+    },
+    {
+      "name": "reward-03-sparkle",
+      "category": "reward",
+      "offsetFrames": 696577,
+      "duration": 1.754
+    },
+    {
+      "name": "reward-04-jackpot",
+      "category": "reward",
+      "offsetFrames": 780769,
+      "duration": 1.884
+    },
+    {
+      "name": "reward-05-coin-big",
+      "category": "reward",
+      "offsetFrames": 871201,
+      "duration": 1.104
+    },
+    {
+      "name": "reward-06-arpeggio",
+      "category": "reward",
+      "offsetFrames": 924193,
+      "duration": 1.404
+    },
+    {
+      "name": "reward-07-level-up",
+      "category": "reward",
+      "offsetFrames": 991585,
+      "duration": 1.654
+    },
+    {
+      "name": "reward-08-fanfare",
+      "category": "reward",
+      "offsetFrames": 1070977,
+      "duration": 1.954
+    },
+    {
+      "name": "reward-09-gem",
+      "category": "reward",
+      "offsetFrames": 1164769,
+      "duration": 0.904
+    },
+    {
+      "name": "reward-10-streak",
+      "category": "reward",
+      "offsetFrames": 1208161,
+      "duration": 1.054
+    },
+    {
+      "name": "reward-11-unlock",
+      "category": "reward",
+      "offsetFrames": 1258753,
+      "duration": 1.604
+    },
+    {
+      "name": "reward-12-star-get",
+      "category": "reward",
+      "offsetFrames": 1335745,
+      "duration": 1.804
+    },
+    {
+      "name": "reward-13-achievement",
+      "category": "reward",
+      "offsetFrames": 1422337,
+      "duration": 2.704
+    },
+    {
+      "name": "reward-14-coin-rain",
+      "category": "reward",
+      "offsetFrames": 1552129,
+      "duration": 1.704
+    },
+    {
+      "name": "reward-15-chime-cluster",
+      "category": "reward",
+      "offsetFrames": 1633921,
+      "duration": 2.454
+    },
+    {
+      "name": "reward-16-magic-swirl",
+      "category": "reward",
+      "offsetFrames": 1751713,
+      "duration": 1.754
+    },
+    {
+      "name": "reward-17-perfect",
+      "category": "reward",
+      "offsetFrames": 1835905,
+      "duration": 1.704
+    },
+    {
+      "name": "reward-18-tally",
+      "category": "reward",
+      "offsetFrames": 1917697,
+      "duration": 1.454
+    },
+    {
+      "name": "reward-19-supernova",
+      "category": "reward",
+      "offsetFrames": 1987489,
+      "duration": 2.604
+    },
+    {
+      "name": "hit-01-impact",
+      "category": "impact",
+      "offsetFrames": 2112481,
+      "duration": 0.924
+    },
+    {
+      "name": "hit-02-deep-boom",
+      "category": "impact",
+      "offsetFrames": 2156833,
+      "duration": 1.654
+    },
+    {
+      "name": "hit-03-metal-clank",
+      "category": "impact",
+      "offsetFrames": 2236225,
+      "duration": 1.254
+    },
+    {
+      "name": "hit-04-glitch-break",
+      "category": "impact",
+      "offsetFrames": 2296417,
+      "duration": 0.814
+    },
+    {
+      "name": "hit-05-shield",
+      "category": "impact",
+      "offsetFrames": 2335489,
+      "duration": 1.254
+    },
+    {
+      "name": "zap-01-pew",
+      "category": "zap",
+      "offsetFrames": 2395681,
+      "duration": 0.544
+    },
+    {
+      "name": "zap-02-laser-sweep",
+      "category": "zap",
+      "offsetFrames": 2421793,
+      "duration": 0.844
+    },
+    {
+      "name": "zap-03-crackle",
+      "category": "zap",
+      "offsetFrames": 2462305,
+      "duration": 0.974
+    },
+    {
+      "name": "zap-04-warp-down",
+      "category": "zap",
+      "offsetFrames": 2509057,
+      "duration": 0.954
+    },
+    {
+      "name": "amb-01-riser",
+      "category": "amb",
+      "offsetFrames": 2554849,
+      "duration": 2.304
+    },
+    {
+      "name": "amb-02-fall",
+      "category": "amb",
+      "offsetFrames": 2665441,
+      "duration": 2.204
+    },
+    {
+      "name": "amb-03-woosh",
+      "category": "amb",
+      "offsetFrames": 2771233,
+      "duration": 1.604
+    },
+    {
+      "name": "amb-04-bell",
+      "category": "amb",
+      "offsetFrames": 2848225,
+      "duration": 3.504
+    },
+    {
+      "name": "amb-05-pad",
+      "category": "amb",
+      "offsetFrames": 3016417,
+      "duration": 2.704
+    }
+  ]
+}

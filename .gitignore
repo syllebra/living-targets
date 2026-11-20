@@ -1,0 +1,6 @@
+# lossless originals are produced by tools/gen-arcade-clicks.py;
+# the published repo ships MP3 only to stay light.
+audio/*.wav
+audio/dry/
+*.log
+.DS_Store

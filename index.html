@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LIVING TARGETS — 40 CSS effects</title>
+<link rel="stylesheet" href="fx.css">
+<style>
+/* ================================================================
+   LIVING TARGETS — pure CSS effects, high contrast for projection
+   Anatomy of a target:
+     .cell > .stage(sh-*)            shape + size vars
+             .halo                   soft glow behind
+             .t      (c-* , fx-*)    the shape: bright frame + idle anim
+                .plate               dark inner plate (clips inside fx)
+                   .fx .fx2          effect layers
+                .core                center layer (dot / reticle / ring)
+                .flash               white flash on hit
+             .shock                  shockwave ring on hit
+             .sp > b*                sparks on hit
+   Idle anim: --idle  ·  Hit anim: --hit  (set per target)
+   ================================================================ */
+:root{
+  --bg:#04050a;
+  --ink:#eaf2ff;
+  --line:#1b2740;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg)}
+body{
+  color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif;
+  min-height:100vh;
+  padding-bottom:30px;
+  background-image:
+    radial-gradient(900px 520px at 12% -8%, #0f1b33 0, transparent 62%),
+    radial-gradient(900px 620px at 88% -4%, #1b0f2e 0, transparent 58%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- header ---------- */
+.bar{
+  position:sticky;top:0;z-index:60;
+  display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between;
+  padding:16px clamp(14px,3vw,40px);
+  background:rgba(4,5,10,.84);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.bar h1{margin:0;font-size:clamp(17px,2vw,25px);letter-spacing:.28em;font-weight:800;color:#fff}
+.bar h1 span{color:#22e8ff}
+.sub{margin:7px 0 0;font:500 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#6d7d9a;letter-spacing:.12em;text-transform:uppercase}
+.ctrls{display:flex;gap:9px;flex-wrap:wrap}
+.pill{
+  appearance:none;cursor:pointer;
+  background:#0a1020;color:#c8daf8;border:1px solid #26314c;
+  padding:10px 14px;border-radius:999px;
+  font:700 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;
+  transition:.16s;display:inline-flex;gap:7px;align-items:center;
+}
+.pill:hover{border-color:#41578a;color:#fff;background:#122040}
+.pill:active{transform:translateY(1px)}
+.pill:focus-visible,.t:focus-visible{outline:3px solid #fff;outline-offset:6px}
+.pill.is-on{background:#22e8ff;color:#03121a;border-color:#22e8ff;box-shadow:0 0 24px rgba(34,232,255,.45)}
+kbd{font:inherit;border:1px solid currentColor;border-radius:4px;padding:1px 4px;font-size:8px;opacity:.55}
+
+/* ---------- grid ---------- */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(calc(212px * var(--zoom,1)),1fr));
+  gap:40px 18px;
+  padding:36px clamp(14px,3vw,44px) 60px;
+  max-width:1680px;margin-inline:auto;
+}
+.cell{margin:0;display:grid;justify-items:center;gap:14px}
+figcaption{
+  font:600 10px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.14em;text-transform:uppercase;text-align:center;color:#78889f;
+  transition:color .2s;
+  min-height:44px;align-self:start;
+  max-width:100%;
+}
+figcaption .row2{display:block;color:#4f5f7a;font-size:9px;letter-spacing:.18em;margin-top:4px}
+.cell:hover figcaption{color:#cddcf5}
+figcaption .idx{color:var(--c);font-weight:800}
+figcaption .shp{color:#4a5a75}
+figcaption .cnt{
+  display:inline-block;min-width:15px;padding:1px 4px;border-radius:20px;
+  background:#101a2e;color:#5f7ea8;font-size:9px;
+}
+body.no-labels figcaption{display:none}
+
+/* ---------- footer ---------- */
+.foot{
+  padding:0 24px 40px;text-align:center;
+  font:500 10px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.14em;text-transform:uppercase;color:#4d5b73;
+}
+.foot kbd{margin:0 3px}
+
+@media (max-width:520px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:34px 10px}
+  .stage{--w:calc(120px*var(--zoom,1));--h:calc(120px*var(--zoom,1));height:calc(170px*var(--zoom,1))}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div>
+    <h1>LIVING <span>TARGETS</span></h1>
+    <p class="sub">40 CSS effects · entrance + idle + hit · click a target to hit it</p>
+  </div>
+  <div class="ctrls">
+    <button id="hitAll" class="pill">HIT ALL <kbd>SPACE</kbd></button>
+    <button id="autoBtn" class="pill">AUTO-HIT</button>
+    <button id="lblBtn" class="pill is-on">LABELS</button>
+    <button id="sizeBtn" class="pill">SIZE ×1</button>
+    <button id="sndBtn" class="pill is-on">SOUND <kbd>M</kbd></button>
+    <button id="spawnBtn" class="pill">RESPAWN <kbd>R</kbd></button>
+  </div>
+</header>
+
+<main id="grid" class="grid"></main>
+
+<footer class="foot">
+  click / tap a target to fire its hit · <kbd>space</kbd> hits everything · each hit = shockwave + sparks + flash + a unique body reaction<br>
+  every target has 3 animations: <b>entrance</b> (15 variants, staggered on reveal) → <b>idle</b> loop → <b>hit</b> reaction · <kbd>r</kbd> or RESPAWN replays the entrances · <kbd>shift</kbd>+click replays one
+</footer>
+
+<script src="fx.js"></script>
+<script>
+const { TARGETS, SHAPE_LABEL, SFX, create, hit, enter, enterAll } = FXKIT;
+
+const grid = document.getElementById('grid');
+const stages = [];
+/* sounds are preloaded by fx.js (short, dry-leaning subset) */
+
+/* ---------------------------------------------------------- build */
+TARGETS.forEach((_, i) => {
+  const num = String(i + 1).padStart(2, '0');
+  const cell = document.createElement('figure');
+  cell.className = 'cell';
+
+  const stage = create(i);
+  cell.className = 'cell c-' + stage._color;
+
+  const cap = document.createElement('figcaption');
+  cap.innerHTML = `<span class="row1"><span class="idx">${num}</span> ${stage._name}</span>`
+                + `<span class="row2"><span class="shp">${SHAPE_LABEL[stage._shape]}</span> · HITS <span class="cnt">0</span></span>`;
+  stage._cntEl = cap.querySelector('.cnt');
+
+  cell.appendChild(stage);
+  cell.appendChild(cap);
+  grid.appendChild(cell);
+  stages.push(stage);
+
+  /* whole stage is clickable, not just the painted shape */
+  stage.addEventListener('click', ev => { stage._cx = ev.clientX; hit(stage); });
+  /* shift+click replays that target's entrance */
+  stage.addEventListener('click', ev => {
+    if (ev.shiftKey) { ev.stopPropagation(); enter(stage, 0, true); }
+  }, true);
+});
+
+/* ------------------------------------------------- reveal on scroll */
+let batch = 0;
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    const stage = en.target;
+    if (stage._shown) return;
+    stage._shown = true;
+    enter(stage, (batch++ % 7) * 60, false);
+    io.unobserve(stage);
+  });
+}, { rootMargin: '0px 0px -6% 0px', threshold: .2 });
+stages.forEach(s => io.observe(s));
+
+/* -------------------------------------------------------- controls */
+const autoBtn = document.getElementById('autoBtn');
+const lblBtn  = document.getElementById('lblBtn');
+let autoId = null;
+
+function hitAll() {
+  SFX.unlock();
+  stages.forEach((s, i) => setTimeout(() => hit(s), i * 16));
+  SFX.play('click-10-volley', { gain: .8 });
+  SFX.play('reward-06-arpeggio', { gain: .3, delay: .10 });
+  SFX.play('reward-15-chime-cluster', { gain: .22, delay: .22 });
+}
+document.getElementById('hitAll').addEventListener('click', hitAll);
+
+document.getElementById('spawnBtn').addEventListener('click', () => {
+  SFX.unlock();
+  enterAll(stages, { stagger: 45 });
+});
+
+autoBtn.addEventListener('click', () => {
+  if (autoId) { clearInterval(autoId); autoId = null; autoBtn.classList.remove('is-on'); return; }
+  autoBtn.classList.add('is-on');
+  autoId = setInterval(() => hit(stages[Math.floor(Math.random() * stages.length)]), 620);
+});
+
+/* size for projector viewing distance */
+const ZOOMS = [1, 1.35, 1.7];
+let z = 0;
+document.getElementById('sizeBtn').addEventListener('click', e => {
+  z = (z + 1) % ZOOMS.length;
+  document.documentElement.style.setProperty('--zoom', ZOOMS[z]);
+  e.currentTarget.textContent = 'SIZE ×' + ZOOMS[z];
+});
+
+lblBtn.addEventListener('click', () => {
+  document.body.classList.toggle('no-labels');
+  lblBtn.classList.toggle('is-on');
+});
+
+/* sound toggle */
+const sndBtn = document.getElementById('sndBtn');
+function setSound(v) {
+  SFX.setOn(v);
+  sndBtn.classList.toggle('is-on', v);
+  sndBtn.innerHTML = v ? 'SOUND <kbd>M</kbd>' : 'MUTED';
+  try { localStorage.setItem('lt-sound', v ? '1' : '0'); } catch (_) {}
+  return v;
+}
+sndBtn.addEventListener('click', () => setSound(!SFX.on));
+(() => {
+  let pref = '1';
+  try { pref = localStorage.getItem('lt-sound') ?? '1'; } catch (_) {}
+  setSound(pref === '1');
+  const unlock = () => { SFX.unlock(); removeEventListener('pointerdown', unlock); };
+  addEventListener('pointerdown', unlock, { once: true });
+})();
+
+addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.key === ' ') { e.preventDefault(); hitAll(); return; }
+  if (e.key === 'm' || e.key === 'M') setSound(!SFX.on);
+  if (e.key === 'r' || e.key === 'R') enterAll(stages, { stagger: 45 });
+});
+</script>
+</body>
+</html>
